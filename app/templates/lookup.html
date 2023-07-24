@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{url_for('static',filename='lookup.css')}}">
+{% endblock %}
+
+{% block content %}
+    <h2 style="margin-left: 5%; margin-top: 5%;">
+        Which product are you looking for?
+    </h2>
+        <form class=" border p-3 rounded sign-in-form" method="POST">
+            {{ form.hidden_tag() }}
+
+            {{ form.query }}
+            {{ form.submit }}
+        </form>
+    {% if output %}
+        <div class="flexbox_container">
+            <div class="flexbox_search_result rounded">
+                {% for key,value in output.items() %}
+                    {% if key == 'image' %}
+                        <div class="sprite_div">
+                            <img src="{{ value }}", alt="sprite">
+                        </div>   
+                    {% else %}
+                        {{key, value}}
+
+                
+                    {%  endif %}
+                    <br>
+                    
+                    
+                      
+                
+                {% block content_ua %}
+                {% endblock %}
+                {% endfor %}
+                <a class="btn btn-primary add" href="{{url_for('add_product', name=output.Name)}}">Add To Cart</a>
+                
+                {% endif %}
+            </div>
+            
+        </div>
+        
+{% endblock %}
