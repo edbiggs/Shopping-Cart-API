@@ -5,7 +5,7 @@ import requests, json
 from flask_login import login_user, logout_user, login_required, current_user
 from .models import User, Product, Cart, db
 from werkzeug.security import check_password_hash
-
+from urllib.parse import urlencode
 
 @app.route('/', methods=["GET", "POST"])
 def home_page():
@@ -88,7 +88,7 @@ def lookup_page():
     
     return render_template('lookup.html', form=form)
 
-@app.route('/products', methods=["GET", "POST"])
+@app.route('/products/', methods=["GET", "POST"])
 @login_required
 def products_page():
 
@@ -129,10 +129,13 @@ def products_page():
             db.session.add(product)
             db.session.commit()
         
-    return render_template('products.html', products=products)
+    return render_template('products.html', products=products, convert_json=json.dumps)
 
-
-
+@app.route('/products/<int:product_id>')
+def single_product(product_id):
+    product = Product.query.get(product_id)
+    print('hi')
+    return render_template('single-product.html', product=product)
 
 @app.route('/add_product/<new_product_id>')
 def add_product(new_product_id):
